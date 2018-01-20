@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from listings.models import Listing, Category, Spec
+from userprofile.models import Profile
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -24,3 +25,8 @@ class SpecSerializer(serializers.HyperlinkedModelSerializer):
             'bathrooms', 'building_size', 'property_type', 'description', 'listing'
         )
 
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('id', 'url', 'active', 'biography', 'display')

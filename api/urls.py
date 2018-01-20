@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^categories/(?P<pk>[0-9]+)/$', views.CategoryDetail.as_view(), name='category-detail'),
     url(r'^specs/$', views.SpecList.as_view(), name='spec-list'),
     url(r'^specs/(?P<pk>[0-9]+)/$', views.SpecDetail.as_view(), name='spec-detail'),
+    url(r'^profile/$', views.ProfileList.as_view(), name='profile-list'),
+    url(r'^profile/(?P<pk>[0-9]+)/$', views.ProfileDetail.as_view(), name='profile-detail'),
 ]
