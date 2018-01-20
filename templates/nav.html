@@ -5,14 +5,13 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
+      {% if user.username == admin_username %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Listings
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          {% if user.username == admin_username %}
           <a class="dropdown-item" href="{% url 'category-list-page' %}"><p class="h6">EDIT</p></a>
-          {% endif %}
           {% for category in category_list %}
           <a class="dropdown-item" href="{% url 'listing-list-page' category.id %}">
             {{ category.title }}
@@ -20,6 +19,28 @@
           {% endfor %}
         </div>
       </li>
+      {% else %}
+      {% if category_list.count > 1 %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Listings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          {% for category in category_list %}
+          <a class="dropdown-item" href="{% url 'listing-list-page' category.id %}">
+            {{ category.title }}
+          </a>
+          {% endfor %}
+        </div>
+      </li>
+      {% elif category_list.count == 1 %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listing-list-page' category_list.0.id %}">
+          {{category_list.0}}
+        </a>
+      </li>
+      {% endif %}
+      {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'about-daniel-page' %}">About Daniel</a>
       </li>
