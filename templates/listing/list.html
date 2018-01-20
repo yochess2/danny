@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="listing-wrapper mt-5">
+
+{% if user.username == admin_username %}
+<div class="listing-wrapper">
   <div class="flex-center flex-column">
     <p class="h2">Pending</p>
   </div>
-
-
   <div class="form-wrapper flex-center flex-column">
     {% for field in form %}
     {% if field.errors %}
@@ -53,8 +53,8 @@
         </div>
       </div>
     </div>
-
   </div>
+  {% endif %}
 
   <div class="row">
     {% for listing in listing_private_list %}
@@ -78,7 +78,7 @@
   </div>
 </div>
 
-<div class="listing-wrapper mt-5">
+<div class="listing-wrapper">
   <div class="row flex-center">
     <p class="h2">{{ category }}</p>
   </div>

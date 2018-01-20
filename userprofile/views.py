@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.views import View
-from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.exceptions import PermissionDenied
@@ -19,7 +18,7 @@ class AboutDaniel(View):
         data['admin'] = get_object_or_404(Profile, user__username=ADMIN, active=True)
 
     def populate_form_data(self, data, *args, **kwargs):
-        # if is_admin(self.request.user):
+        if is_admin(self.request.user):
             data['form'] = self.form_class(*args, **kwargs)
 
     def get(self, request, **kwargs):

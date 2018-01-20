@@ -1,6 +1,8 @@
 <div class="d-flex flex-column">
   <p class="h2 align-self-center">Specs:</p>
 </div>
+
+{% if user.username == admin_username %}
 <div class="form-wrapper flex-center flex-column">
   {% for field in spec_form %}
   {% if field.errors %}
@@ -92,6 +94,8 @@
     </div>
   </div>
 </div>
+{% endif %}
+
 {% if spec %}
 <div class="row mt-5">
   <div class="col-md-12 col-lg-4">

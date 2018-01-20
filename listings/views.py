@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.exceptions import PermissionDenied
 
 from .models import Listing, Category
 from .forms import ListingForm, SpecForm
+
+ADMIN = settings.ADMIN
 
 def index(request):
     category_list = Category.objects.filter(active=True)
@@ -21,12 +25,14 @@ class ListingList(View):
         data['category'] = get_object_or_404(Category, id=category_id, active=True)
 
     def populate_listing_list_data(self, data, category):
-        listing_list = Listing.objects.filter(category=category)
+        listing_list = Listing.objects.filter(category=category, active=True)
         data['listing_public_list'] = listing_list.filter(public=True)
-        data['listing_private_list'] = listing_list.filter(public=False)
+        if is_admin(self.request.user):
+            data['listing_private_list'] = listing_list.filter(public=False)
 
     def populate_form_data(self, data, *args, **kwargs):
-        data['form'] = self.form_class(*args, **kwargs)
+        if is_admin(self.request.user):
+            data['form'] = self.form_class(*args, **kwargs)
 
     def get(self, request, **kwargs):
         data = {}
@@ -37,6 +43,8 @@ class ListingList(View):
         return render(request, self.template, data)
 
     def post(self, request, **kwargs):
+        if not is_admin(self.request.user):
+            raise PermissionDenied
         data = {}
         self.populate_form_data(data, self.request.POST, self.request.FILES)
         if data['form'].is_valid():
@@ -67,10 +75,11 @@ class ListingDetail(View):
         data['form'] = self.listing_form_class(*args, **kwargs)
 
     def populate_spec_form_data(self, data, spec, *args):
-        if spec:
-            data['spec_form'] = self.spec_form_class(instance=spec, *args)
-        else:
-            data['spec_form'] = self.spec_form_class(initial={}, *args)
+        if is_admin(self.request.user):
+            if spec:
+                data['spec_form'] = self.spec_form_class(instance=spec, *args)
+            else:
+                data['spec_form'] = self.spec_form_class(initial={}, *args)
 
     def get(self, request, **kwargs):
         data = {}
@@ -82,6 +91,8 @@ class ListingDetail(View):
         return render(request, self.template, data)
 
     def post(self, request, **kwargs):
+        if not is_admin(self.request.user):
+            raise PermissionDenied
         submit_type = self.request.POST.get('submit-type')
         data = {}
         self.populate_listing_data(data, kwargs['listing_id'])
@@ -109,4 +120,8 @@ class ListingDetail(View):
 
 
 def populate_nav_data(data):
+    data['admin_username'] = ADMIN
     data['category_list'] = Category.objects.filter(active=True)
+
+def is_admin(user):
+    return user.is_authenticated and user.username == ADMIN
