@@ -16,6 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ENV VARIABLES
+ADMIN = os.environ.get('ADMIN_ACCOUNT')
 DANNY_SECRET_KEY = os.environ.get('DANNY_SECRET_KEY')
 SQ_LITE_DB = os.path.join(BASE_DIR, 'db.sqlite3')
 
