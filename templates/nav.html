@@ -10,6 +10,7 @@
           Listings
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'category-list-page' %}"><p class="h6">EDIT</p></a>
           {% for category in category_list %}
           <a class="dropdown-item" href="{% url 'listing-list-page' category.id %}">
             {{ category.title }}

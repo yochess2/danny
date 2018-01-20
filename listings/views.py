@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.exceptions import PermissionDenied
 
 from .models import Listing, Category
-from .forms import ListingForm, SpecForm
+from .forms import ListingForm, SpecForm, CategoryForm
 
 ADMIN = settings.ADMIN
 
@@ -15,6 +15,54 @@ def index(request):
     return render(request, 'listing/index.html', context={
         'category_list': category_list
     })
+
+
+class CategoryDetails(View):
+    form_class = CategoryForm
+    template = 'listing/categories.html'
+
+    def populate_form_datas(self, data, category_set, *args, **kwargs):
+        if is_admin(self.request.user):
+            data['forms']  = []
+            return_form = False
+
+            for category in category_set:
+                if 'category_id' in kwargs and int(kwargs['category_id']) == category.id:
+                    form = self.form_class(*args, instance=category)
+                    return_form = form
+                else:
+                    form = self.form_class(instance=category)
+                category_form = {
+                    'category_id': category.id,
+                    'form': form
+                }
+                data['forms'].append(category_form)
+
+            return return_form
+
+    def get(self, request, **kwargs):
+        if not is_admin(self.request.user):
+            raise PermissionDenied
+        data = {}
+        populate_nav_data(data)
+        category_set = Category.objects.filter(active=True)
+        self.populate_form_datas(data, category_set)
+        return render(request, self.template, data)
+
+    def post(self, request, **kwargs):
+        if not is_admin(self.request.user):
+            raise PermissionDenied
+        data = {}
+        category_id = self.request.POST.get('category_id')
+        title = self.request.POST.get('title')
+
+        populate_nav_data(data)
+        category_set = Category.objects.filter(active=True)
+        form = self.populate_form_datas(data, category_set, {'title': title}, category_id=category_id)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.path_info)
+        return render(request, self.template, data)
 
 
 class ListingList(View):
