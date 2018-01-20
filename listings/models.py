@@ -2,20 +2,20 @@ from django.db import models
 
 class Category(models.Model):
     active = models.BooleanField(default=True)
-    title = models.CharField(max_length=63, unique=True)
+    title = models.CharField(max_length=63)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
+
 class Listing(models.Model):
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
-    title = models.CharField(max_length=127, unique=True)
+    title = models.CharField(max_length=127)
     created = models.DateTimeField(auto_now_add=True)
     display = models.ImageField(upload_to='images/', default='images/default.png')
     public = models.BooleanField(default=False)
-
 
     class Meta:
         ordering = ["-created"]

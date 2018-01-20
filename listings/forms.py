@@ -1,11 +1,30 @@
 from django import forms
 
-from .models import Listing, Spec
+from .models import Listing, Spec, Category
+
+class CategoryForm(forms.ModelForm):
+    def clean_title(self):
+        data = self.cleaned_data['title']
+        if Category.objects.filter(active=True, title=data).count() > 0:
+            raise forms.ValidationError("Title already exists!")
+        return data
+
+    class Meta:
+        model = Listing
+        fields = ['title']
+
 
 class ListingForm(forms.ModelForm):
+    def clean_title(self):
+        data = self.cleaned_data['title']
+        if Listing.objects.filter(active=True, title=data).count() > 0:
+            raise forms.ValidationError("Title already exists!")
+        return data
+
     class Meta:
         model = Listing
         fields = ['category', 'title', 'display', 'public']
+
 
 class SpecForm(forms.ModelForm):
     def clean_zipcode(self):

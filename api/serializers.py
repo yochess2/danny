@@ -4,17 +4,27 @@ from listings.models import Listing, Category, Spec
 from userprofile.models import Profile
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    def validate_title(self, value):
+        if Category.objects.filter(active=True, title=value).count() > 0:
+            raise serializers.ValidationError("Title already exists!")
+        return value
+
     class Meta:
         model = Category
-        fields = ('id', 'url', 'active', 'title', 'created')
+        fields = ('id', 'url', 'title', 'created')
 
 
 class ListingSerializer(serializers.HyperlinkedModelSerializer):
     spec = serializers.HyperlinkedRelatedField(view_name='spec-detail', read_only=True)
 
+    def validate_title(self, value):
+        if Listing.objects.filter(active=True, title=value).count() > 0:
+            raise serializers.ValidationError("Title already exists!")
+        return value
+
     class Meta:
         model = Listing
-        fields = ('id', 'url', 'active', 'title', 'created', 'category', 'spec', 'display', 'public')
+        fields = ('id', 'url', 'title', 'created', 'category', 'spec', 'display', 'public')
 
 
 class SpecSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,4 +39,4 @@ class SpecSerializer(serializers.HyperlinkedModelSerializer):
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id', 'url', 'active', 'biography', 'display')
+        fields = ('id', 'url', 'biography', 'display')
