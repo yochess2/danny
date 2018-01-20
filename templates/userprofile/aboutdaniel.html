@@ -5,9 +5,28 @@
 {% endblock %}
 
 {% block content %}
-About Daniel
 
-{{ form }}
+<div class="about-form">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="submit">
+  </form>
+</div>
 
-{{ daniel }}
+<div>
+  <div class="flex-center">
+    <p class="h2">About Daniel</p>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 col-md-12 mt-5">
+        <img src="{{ daniel.display.url }}" class="img-fluid" alt="Responsive image">
+    </div>
+    <div class="col-lg-8 col-md-12 mt-5">
+        <pre><span>{{ daniel.biography }}</span></pre>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
