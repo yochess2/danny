@@ -3,6 +3,7 @@ from django.views import View
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.exceptions import PermissionDenied
 
 from .models import Profile
 from .forms import AboutDaniel
@@ -15,10 +16,11 @@ class AboutDaniel(View):
     form_class = AboutDaniel
 
     def populate_profile_data(self, data):
-        data['admin'] = get_object_or_404(Profile, user__username=ADMIN)
+        data['admin'] = get_object_or_404(Profile, user__username=ADMIN, active=True)
 
     def populate_form_data(self, data, *args, **kwargs):
-        data['form'] = self.form_class(*args, **kwargs)
+        # if is_admin(self.request.user):
+            data['form'] = self.form_class(*args, **kwargs)
 
     def get(self, request, **kwargs):
         data = {}
@@ -28,6 +30,8 @@ class AboutDaniel(View):
         return render(request, self.template, data)
 
     def post(self, request, **kwargs):
+        if not is_admin(self.request.user):
+            raise PermissionDenied
         data = {}
         populate_nav_data(data)
         self.populate_profile_data(data)
@@ -39,3 +43,6 @@ class AboutDaniel(View):
 
 def populate_nav_data(data):
     data['category_list'] = Category.objects.filter(active=True)
+
+def is_admin(user):
+    return user.is_authenticated and user.username == ADMIN
