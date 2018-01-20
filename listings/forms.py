@@ -5,9 +5,17 @@ from .models import Listing, Spec, Category
 class CategoryForm(forms.ModelForm):
     def clean_title(self):
         data = self.cleaned_data['title']
-        if Category.objects.filter(active=True, title=data).count() > 0:
+        category_set = Category.objects.filter(active=True, title=data)
+
+        if category_set.count() == 1:
+            if self.instance.id and self.instance.id == category_set[0].id:
+                return data
+            else:
+                raise forms.ValidationError("Title already exists!")
+        elif category_set.count() > 1:
             raise forms.ValidationError("Title already exists!")
-        return data
+        else:
+            return data
 
     class Meta:
         model = Category
@@ -17,9 +25,18 @@ class CategoryForm(forms.ModelForm):
 class ListingForm(forms.ModelForm):
     def clean_title(self):
         data = self.cleaned_data['title']
-        if Listing.objects.filter(active=True, title=data).count() > 0:
+        listing_set = Listing.objects.filter(active=True, title=data)
+
+        if listing_set.count() == 1:
+            if self.instance.id and self.instance.id == listing_set[0].id:
+                return data
+            else:
+                raise forms.ValidationError("Title already exists!")
+        elif listing_set.count() > 1:
             raise forms.ValidationError("Title already exists!")
-        return data
+        else:
+            return data
+
 
     class Meta:
         model = Listing
