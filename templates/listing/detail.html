@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.4/js/mdb.min.js" integrity="sha256-DdcaOr7GF9S+ib0kzK5aqDl5QyFyw26mEPkQxj49GXQ=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+  <p class="h2 align-self-center">{{ listing.category }}:</p>
+</div>
+
+<div class="form-wrapper flex-center flex-column">
+  {% for field in form %}
+  {% if field.errors %}
+  <div class="alert alert-danger">{{ field.errors }}</div>
+  {% endif %}
+  {% endfor %}
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
+    Edit {{ listing.title }}
+  </button>
+
+  <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="POST" enctype="multipart/form-data" >
+          {% csrf_token %}
+          <div class="modal-header text-center">
+            <h5 class="modal-title w-100 font-bold" id="formModalLabel">Edit {{ listing.title}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <div class="md-form form-sm">
+              category: {{ form.category }}
+            </div>
+            <div class="md-form form-sm">
+              {{ form.title }}
+              <label for="{{form.title.id_for_label}}">Title</label>
+              <div class="text-danger">{{ form.title.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ form.display }}
+            </div>
+            <div class="md-form form-sm">
+              Make Public: {{ form.public }}
+            </div>
+            <input type="hidden" name="submit-type" value="put-listing">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="view mt-5 z-depth-5">
+  <img src="{{ listing.display.url }}" class="img-fluid" alt="" style="width:100%">
+</div>
+
+<div class="listing-spec mt-5">
+  {% include 'listing/spec.html' %}
+</div>
+{% endblock %}

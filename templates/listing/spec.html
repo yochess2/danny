@@ -1,0 +1,127 @@
+<div class="d-flex flex-column">
+  <p class="h2 align-self-center">Specs:</p>
+</div>
+<div class="form-wrapper flex-center flex-column">
+  {% for field in spec_form %}
+  {% if field.errors %}
+  <div class="alert alert-danger">{{ field.errors }}</div>
+  {% endif %}
+  {% endfor %}
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#specFormModalLabel">
+    {% if spec %}
+    Edit {{ listing.title }} Specs
+    {% else %}
+    Create {{ listing.title }} Specs
+    {% endif %}
+  </button>
+
+  <div class="modal fade" id="specFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="POST" enctype="multipart/form-data" >
+          {% csrf_token %}
+          <div class="modal-header text-center">
+            <h5 class="modal-title w-100 font-bold" id="specFormModalLabel">
+              {% if spec %}
+              Edit {{ listing.title }} Specs
+              {% else %}
+              Create {{ listing.title }} Specs
+              {% endif %}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+
+            <div class="md-form form-sm">
+              {{ spec_form.address }}
+              <label for="{{spec_form.address.id_for_label}}">Address</label>
+              <div class="text-danger">{{ spec_form.address.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.city }}
+              <label for="{{spec_form.city.id_for_label}}">City</label>
+              <div class="text-danger">{{ spec_form.city.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.state }}
+              <label for="{{spec_form.state.id_for_label}}">State</label>
+              <div class="text-danger">{{ spec_form.state.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.zipcode }}
+              <label for="{{spec_form.zipcode.id_for_label}}">Zipcode</label>
+              <div class="text-danger">{{ spec_form.zipcode.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.bedrooms }}
+              <label for="{{spec_form.bedrooms.id_for_label}}">Bedrooms</label>
+              <div class="text-danger">{{ spec_form.bedrooms.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.bathrooms }}
+              <label for="{{spec_form.bathrooms.id_for_label}}">Bathrooms</label>
+              <div class="text-danger">{{ spec_form.bathrooms.errors }}</div>
+            </div>
+            <div class="md-form form-sm">
+              {{ spec_form.building_size }}
+              <label for="{{spec_form.building_size.id_for_label}}">Building Size</label>
+              <div class="text-danger">{{ spec_form.building_size.errors }}</div>
+            </div>
+             <div class="md-form form-sm">
+              {{ spec_form.property_type }}
+              <label for="{{spec_form.property_type.id_for_label}}">Property Type</label>
+              <div class="text-danger">{{ spec_form.property_type.errors }}</div>
+            </div>
+             <div class="md-form form-sm">
+              {{ spec_form.description }}
+              <label for="{{spec_form.description.id_for_label}}">Description</label>
+              <div class="text-danger">{{ spec_form.description.errors }}</div>
+            </div>
+
+
+            <input type="hidden" name="submit-type" value="post-or-put-spec">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% if spec %}
+<div class="row mt-5">
+  <div class="col-md-12 col-lg-4">
+    <div><b>Address</b>: {{ listing.spec.address }}</div>
+    <div><b>City</b>: {{ listing.spec.city }}</div>
+    <div><b>State</b>: {{ listing.spec.state }}</div>
+    <div><b>Zipcode</b>: {{ listing.spec.zipcode }}</div>
+
+  </div>
+  <div class="col-md-12 col-lg-4">
+    {% if listing.spec.bedrooms or listing.spec.bedrooms == 0 %}
+    <div><b>Bedrooms</b>: {{ listing.spec.bedrooms }}</div>
+    {% endif %}
+    {% if listing.spec.bathrooms or listing.spec.bathrooms == 0 %}
+    <div><b>Bathrooms</b>: {{ listing.spec.bathrooms }}</div>
+    {% endif %}
+  </div>
+  <div class="col-md-12 col-lg-4">
+    {% if listing.spec.building_size or listing.spec.building_size == 0 %}
+    <div><b>Building Size</b>: {{ listing.spec.building_size }}</div>
+    {% endif %}
+    {% if listing.spec.property_type %}
+    <div><b>Property Type</b>:  {{ listing.spec.property_type }}</div>
+    {% endif %}
+  </div>
+</div>
+<div class="mt-5">
+  {% if listing.spec.description %}
+  <div>Description: </div>
+  <pre><span>{{ listing.spec.description }}</span></pre>
+  {% endif %}
+</div>
+{% endif %}

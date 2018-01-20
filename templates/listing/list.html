@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.4/js/mdb.min.js" integrity="sha256-DdcaOr7GF9S+ib0kzK5aqDl5QyFyw26mEPkQxj49GXQ=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+<div class="listing-wrapper mt-5">
+  <div class="flex-center flex-column">
+    <p class="h2">Pending</p>
+  </div>
+
+
+  <div class="form-wrapper flex-center flex-column">
+    {% for field in form %}
+    {% if field.errors %}
+    <div class="alert alert-danger">{{ field.errors }}</div>
+    {% endif %}
+    {% endfor %}
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
+      Create New Listing
+    </button>
+
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="modal-header text-center">
+              <h5 class="modal-title w-100 font-bold" id="formModalLabel">Create New Listing</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              <div class="md-form form-sm">
+                category: {{ form.category }}
+              </div>
+              <div class="md-form form-sm">
+                {{ form.title }}
+                <label for="{{form.title.id_for_label}}">Title</label>
+                <div class="text-danger">{{ form.title.errors }}</div>
+              </div>
+              <div class="md-form form-sm">
+                {{ form.display }}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <input type="submit" class="btn btn-primary" value="Submit">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    {% for listing in listing_private_list %}
+    <div class="col-lg-4 col-md-12 mt-5">
+      <p class="text-center h5">{{ listing.spec.address }}</p>
+      {% if not listing.spec.address %}
+      <p class="text-center h5 text-danger">NOT SET</p>
+      {% endif %}
+
+      <div class="view overlay hm-blue-light z-depth-5">
+        <img src="{{ listing.display.url }}" class="img-fluid" alt="Responsive image">
+        <a href="{% url 'listing-detail-page' listing.id %}">
+          <div class="mask waves-effect waves-light flex-column flex-center">
+            <p class="white-text">{{ listing.spec.address }}</p>
+            <p class="white-text">{{ listing.spec.city }}, {{ listing.spec.state }}, {{ listing.spec.zipcode }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="listing-wrapper mt-5">
+  <div class="row flex-center">
+    <p class="h2">{{ category }}</p>
+  </div>
+
+  <div class="row">
+    {% for listing in listing_public_list %}
+    <div class="col-lg-4 col-md-12 mt-5">
+      <p class="text-center h5">{{ listing.spec.address }}</p>
+
+      <div class="view overlay hm-blue-light z-depth-5">
+        <img src="{{ listing.display.url }}" class="img-fluid" alt="Responsive image">
+        <a href="{% url 'listing-detail-page' listing.id %}">
+          <div class="mask waves-effect waves-light flex-column flex-center">
+            <p class="white-text">{{ listing.spec.address }}</p>
+            <p class="white-text">{{ listing.spec.city }}, {{ listing.spec.state }}, {{ listing.spec.zipcode }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
