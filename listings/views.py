@@ -46,22 +46,39 @@ class CategoryDetails(View):
         populate_nav_data(data)
         category_set = Category.objects.filter(active=True)
         self.populate_form_datas(data, category_set)
+        data['new_form'] = CategoryForm(initial={})
         return render(request, self.template, data)
 
     def post(self, request, **kwargs):
         if not is_admin(self.request.user):
             raise PermissionDenied
-        data = {}
-        category_id = self.request.POST.get('category_id')
-        title = self.request.POST.get('title')
 
-        populate_nav_data(data)
-        category_set = Category.objects.filter(active=True)
-        form = self.populate_form_datas(data, category_set, {'title': title}, category_id=category_id)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(request.path_info)
-        return render(request, self.template, data)
+        submit_type = self.request.POST.get('submit-type')
+
+        if submit_type == 'put-category':
+            data = {}
+            category_id = self.request.POST.get('category_id')
+            title = self.request.POST.get('title')
+
+            populate_nav_data(data)
+            category_set = Category.objects.filter(active=True)
+            data['new_form'] = CategoryForm(initial={})
+            form = self.populate_form_datas(data, category_set, {'title': title}, category_id=category_id)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(request.path_info)
+            return render(request, self.template, data)
+        else:
+            data = {}
+            populate_nav_data(data)
+            category_set = Category.objects.filter(active=True)
+            self.populate_form_datas(data, category_set)
+            data['new_form'] = CategoryForm(self.request.POST)
+            if data['new_form'].is_valid():
+                category = data['new_form'].save()
+                return HttpResponseRedirect(request.path_info)
+            return render(request, self.template, data)
+
 
 
 class ListingList(View):

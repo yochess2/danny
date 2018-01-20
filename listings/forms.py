@@ -10,7 +10,7 @@ class CategoryForm(forms.ModelForm):
         return data
 
     class Meta:
-        model = Listing
+        model = Category
         fields = ['title']
 
 

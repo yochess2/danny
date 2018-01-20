@@ -6,15 +6,27 @@
 
 {% block content %}
 
+<p class="h4">Existing Category</p>
 {% for obj in forms %}
 <div class="mt-5">
   <form method="POST">
     {% csrf_token %}
     {{ obj.form }}
     <input type="hidden" name="category_id" value="{{ obj.category_id }}">
+    <input type="hidden" name="submit-type" value="put-category">
     <input type="submit">
   </form>
 </div>
 {% endfor %}
+
+<p class="h4 mt-5">New Category</p>
+<div class="mt-5">
+  <form method="POST">
+    {% csrf_token %}
+    {{ new_form }}
+    <input type="hidden" name="submit-type" value="post-category">
+    <input type="submit">
+  </form>
+</div>
 
 {% endblock %}
