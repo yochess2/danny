@@ -97,6 +97,7 @@ class ListingList(View):
     def populate_form_data(self, data, *args, **kwargs):
         if is_admin(self.request.user):
             data['form'] = self.form_class(*args, **kwargs)
+            data['form'].fields['category'].queryset = Category.objects.filter(active=True)
 
     def get(self, request, **kwargs):
         data = {}
@@ -137,6 +138,7 @@ class ListingDetail(View):
 
     def populate_listing_form_data(self, data, *args, **kwargs):
         data['form'] = self.listing_form_class(*args, **kwargs)
+        data['form'].fields['category'].queryset = Category.objects.filter(active=True)
 
     def populate_spec_form_data(self, data, spec, *args):
         if is_admin(self.request.user):
