@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.api_root),
+    url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^listings/$', views.ListingList.as_view(), name='listing-list'),
     url(r'^listings/(?P<pk>[0-9]+)/$', views.ListingDetail.as_view(), name='listing-detail'),
     url(r'^categories/$', views.CategoryList.as_view(), name='category-list'),
