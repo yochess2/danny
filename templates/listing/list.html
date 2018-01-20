@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.4/js/mdb.min.js" integrity="sha256-DdcaOr7GF9S+ib0kzK5aqDl5QyFyw26mEPkQxj49GXQ=" cro mt-5ssorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.4/js/mdb.min.js" integrity="sha256-DdcaOr7GF9S+ib0kzK5aqDl5QyFyw26mEPkQxj49GXQ=" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
 
-{% if user.username == admin_username %}
 <div class="listing-wrapper">
+  {% if user.username == admin_username %}
   <div class="flex-center flex-column">
     <p class="h2">Pending</p>
   </div>

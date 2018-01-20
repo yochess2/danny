@@ -10,11 +10,10 @@ from .forms import ListingForm, SpecForm, CategoryForm
 ADMIN = settings.ADMIN
 
 def index(request):
-    category_list = Category.objects.filter(active=True)
+    data = {}
+    populate_nav_data(data)
 
-    return render(request, 'listing/index.html', context={
-        'category_list': category_list
-    })
+    return render(request, 'listing/index.html', data)
 
 
 class CategoryDetails(View):

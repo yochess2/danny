@@ -41,6 +41,7 @@ class AboutDaniel(View):
         return render(request, self.template, data)
 
 def populate_nav_data(data):
+    data['admin_username'] = ADMIN
     data['category_list'] = Category.objects.filter(active=True)
 
 def is_admin(user):
