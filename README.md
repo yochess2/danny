@@ -7,6 +7,8 @@ view on https://calm-springs-32281.herokuapp.com/
 - [ ] delete options
 - [ ] testimonials feature
 - [ ] contact form
+- [ ] captcha for forms
+- [ ] admin login security (either google r u a bot, or google auth)
 - [ ] multiple pictures per listing (and lightbox or gallery display)
 - [ ] whats my house worth feature
 
