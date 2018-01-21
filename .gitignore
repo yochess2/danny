@@ -111,3 +111,5 @@ static_cdn/
 *.sqlite3
 
 media/
+
+*.bak
