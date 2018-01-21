@@ -30,7 +30,7 @@ SECRET_KEY = DANNY_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['calm-springs-32281', 'localhost']
+ALLOWED_HOSTS = ['calm-springs-32281.herokuapp.com', 'localhost']
 
 
 # Application definition
