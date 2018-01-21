@@ -14,7 +14,7 @@ class Listing(models.Model):
     active = models.BooleanField(default=True)
     title = models.CharField(max_length=127)
     created = models.DateTimeField(auto_now_add=True)
-    display = models.ImageField(upload_to='images/', default='images/default.png')
+    display = models.ImageField(default='images/default.png')
     public = models.BooleanField(default=False)
 
     class Meta:
