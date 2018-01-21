@@ -7,7 +7,10 @@ view on https://calm-springs-32281.herokuapp.com/
 - [ ] delete options
 - [ ] testimonials feature
 - [ ] contact form
+- [ ] multiple pictures per listing (and lightbox or gallery display)
 - [ ] whats my house worth feature
+
+## nice to haves
 - [ ] better form UI
 
 ## ultimate nice to have
